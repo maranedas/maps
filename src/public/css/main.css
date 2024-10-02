@@ -1,0 +1,420 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+body {
+    display: grid;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    height: 100vh;
+    margin: 0;
+    top: 0;
+    place-items: center;
+    background-color: #7272722b;
+  }
+
+
+/* Estilo para el menú superior */
+.menu-superior {
+  
+  background-color: #174a43;
+  background-image: linear-gradient(90deg, #174a43 0%, #4d7751 46%, #9cc88e 96%);
+  
+
+  color: white; /* Color del texto */
+  padding: 10px 20px; /* Espaciado interno */
+  position: fixed; /* Fijo en la parte superior */
+  top: 0;
+  width: 100%; /* Ocupa todo el ancho de la pantalla */
+  z-index: 1000; /* Asegura que el menú esté por encima de otros elementos */
+  display: flex; /* Habilita flexbox para alineación */
+  align-items: center; /* Alinea verticalmente el contenido */
+}
+
+.logo {
+  height: 50px; /* Ajusta la altura del logo según sea necesario */
+  margin-left: 50px; /* Espacio entre el logo y el borde izquierdo */
+  margin-right: 20px; /* Espacio entre el logo y el texto */
+}
+
+nav {
+  flex-grow: 1; /* Hace que el nav tome el espacio restante */
+  text-align: center; /* Centra el texto dentro del nav */
+}
+
+/*MENÚ*/  
+#menu-container {
+  position: fixed;
+  bottom: 0;
+  left: 20px; /* Margen izquierdo de 20px */
+  width: calc(100% - 40px); /* Ancho del 100% menos el margen izquierdo y derecho */
+  height: 0; /* Altura inicial del menú, se expandirá al mostrarse */
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 1000;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+  overflow-y: auto;
+}
+
+#informacion-horario {
+  display: none;
+}
+#menu-container.expanded {
+  height: 80%;
+}
+
+#menu-container.collapsed {
+  height: 0px;
+}
+
+/* Pestaña web */
+#menu-tab {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #f0b349;
+  color: #fff;
+  padding: 10px 150px;
+  border-radius: 20px 20px 0 0;
+  text-align: center;
+}
+
+#menu-tab i {
+  font-size: inherit;
+}
+
+/* Estilos para el contenedor del menú reciclaje */
+#menu-reciclaje {
+  display: flex; 
+  flex-direction: column; 
+  padding: 20px; 
+}
+
+/* Contenedor específico para el título y el botón de retroceso */
+#title-and-back {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 10px; 
+}
+
+/* Estilos para el botón de volver al menú principal */
+#back-to-menu-principal {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #727272bd;
+  color: #fff;
+  padding: 12px 16px; 
+  border-radius: 10px;
+  text-align: center;
+  margin-right: 20px; 
+}
+
+/* Estilos para el título */
+#toggle-title {
+  margin-top: 15px;
+  font-size: 24px; 
+  text-align: center; 
+}
+
+
+
+/*MAPA*/
+
+#map-template {
+    height: 100%;
+    width: 100%;
+    top: 0vh; /*16vh si es para darle espacio al menu  */
+    border-radius: 8px 8px 0 0;
+    position: fixed;
+}
+
+/* ocultar el control de zoom*/
+.leaflet-control-zoom {
+  display: none !important;
+}
+
+/*IMAGEN FINFORMACION RECICLAJE*/
+#informacion-reciclaje {
+  display: none;
+  background-image: url('../icons/people-recicle.png');
+  background-position: bottom; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+/*SECCION PUNTOS DE RECICLAJE*/
+.info-puntos {
+  box-sizing: border-box;
+  padding: 24px;
+}
+
+.container-puntos {
+  width: 30%;
+  height: 80%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+  z-index: 500;
+  position: absolute;
+  left: 0;
+}
+
+.container-puntos .object {
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/*MENSAJE SELECCION UBICACION*/
+
+#info-ubicacion {
+  position: absolute;
+  top: 50PX;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  font-weight: bold;
+  color: #333;
+  display: none; /* Se muestra al ocultar el menú */
+}
+
+/*DETALLE SECTORES*/
+
+#info-pane {
+    position: absolute;
+    top: 5vh;
+    right: 10px;
+    z-index: 400;
+    padding: 1em;
+    background: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+/* CONTENEDOR MENU */
+
+.glassmorphism-effect {
+    background: rgba(255, 255, 255, 0.785);
+    box-shadow: 0 8px 32px 0 rgba(46, 42, 32, 0.37);
+    -webkit-backdrop-filter: blur(0.3px);
+    backdrop-filter: blur(1px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .container {
+    width: 100%;
+    height: 60%; /*tamaño del menu*/
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-gap: 20px;
+    z-index: 1000;
+  }
+  
+  .padding-box {
+    box-sizing: border-box;
+    padding: 24px;
+    
+  }
+
+
+  /* PUNTO INDICACDOR SECTOR CAMION  */
+  .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.indicator-green {
+    background-color: green;
+    animation: blink-green 4s infinite;
+}
+
+.indicator-red {
+    background-color: red;
+    animation: blink-red 4s infinite;
+}
+
+@keyframes blink-green {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes blink-red {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+  
+  /* MENU: lado izquierdo */
+  .title p:first-child {
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 15px;
+  }
+  
+  ​.title p:last-child {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  
+  /* BOTONES */
+  /* Estilo base para los botones tipo card */
+button.object {
+  background-color: rgb(155 233 112 / 66%);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  padding: 13px 20px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Efecto hover para resaltar el botón */
+button.object:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto al hacer clic en el botón */
+button.object:active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Estilo para el icono en el lado derecho del texto */
+button.object i {
+  margin-left: 10px;
+  color: #007BFF;
+  font-size: 20px;
+  z-index: 2; /* Asegura que el icono esté por encima de la imagen */
+}
+
+/* Estilo para los contenedores de botones para que tengan espacio entre ellos */
+.container .object {
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.sector-button {
+  background-color: rgb(155 233 112 / 66%);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 6px 6px;
+  text-align: center;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-top: -8px;   
+  margin-bottom: 4px;
+}
+  
+  /* MENU: lado derecho.. */
+  .main-content > div:nth-child(2) {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  
+  .card {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
+    height: 100px;
+    position: relative;
+    width: 100%;
+  }
+  
+  .card > div:first-child {
+    align-items: center;
+    border-radius: 16px;
+    display: flex;
+    grid-column: 1/5;
+    grid-row: 1/2;
+    z-index: 1;
+  }
+  
+  .card > div:first-child p {
+    color: #000000;
+    font-weight: 600;
+    margin: 0;
+    padding-right: 7px;
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+  }
+  
+  .card > div:last-child {
+    border-radius: 16px;
+    display: grid;
+    grid-column: 2/5;
+    grid-row: 1/2;
+    justify-content: center;
+    z-index: 2;
+  }
+  
+  .card > div:last-child p:first-child {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 18px 0 -8px 0;
+  }
+  
+  .card > div:last-child p:last-child {
+    margin: 0;
+  }
+  
+  .margin-bottom-card {
+    margin-bottom: 20px;
+  }
+  
+  /* responsive... */
+  @media (max-width: 1300px) {
+    .container {
+      grid-template-columns: none;
+      height: 80%;
+    }
+  
+    body {
+      height: 100%;
+    }
+  }
+  @media (max-width: 900px) {
+    .main-content > div:nth-child(2) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 650px) {
+    .main-content > div:nth-child(2) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 500px) {
+    .main-content > div:nth-child(2) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+

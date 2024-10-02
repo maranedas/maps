@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/parallax.css">
+  <meta name="theme-color" content="#000000">
+</head>
+<body class="bg-[#0B0C14]">
+<div class="container">
+
+  <%- include('partials/header') %>     
+  
+  <main class="main-content banner">
+    <video autoplay muted loop class="background-video">
+      <source src="/icons/file.mp4" type="video/mp4">
+    </video>
+    <div class="content-wrapper">
+      <aside class="left-area">
+        <h1>Conoce tus puntos verdes</h1>
+        <h2>coyhaique limpio es taria de todos</h2>
+        <p>Utilizar los puntos verdes es una manera efectiva de contribuir al reciclaje y cuidar el medio ambiente</p>
+        <button onclick="window.location.href='/mapa'" class="action-button">Ver Mapa</button>
+      </aside>
+    </div>
+  </main>
+
+  <div class="stats-container">
+    <div class="stat-box">
+      <div class="stat-image">
+        <img src="/icons/vidrio.png" alt="VIDRIO">
+      </div>
+      <div class="stat-text">
+        <p><i class="fas fa-check"></i>Botellas, frascos, envases, vasos de vidrio transparente o de color, perfumes, frascos de medicamentos.</p>
+        <p><i class="fas fa-times"></i>Vidrios con plástico incorporado, parabrisas, ampolletas, tubos fluorescentes, loza, ventanas, espejos, pírex, cristales, vidrio templado.</p>
+      </div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-image">
+        <img src="/icons/pet.png" alt="PET">
+      </div>
+      <div class="stat-text">
+        <p><i class="fas fa-check"></i>Papel, libros sin tapa, diarios, carton corrugados, cilindros de papel. Sin importar si está impreso o escrito, pero no debe estar sucio.</p>
+        <p><i class="fas fa-times"></i> Libros con tapas, papeles manchados o con cintas adhesivas o corchetes. cajas manchadas con aceites o grasa</p>
+      </div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-image">
+        <img src="/icons/aluminio.png" alt="ALUMINIO">
+      </div>
+      <div class="stat-text">
+        <p><i class="fas fa-check"></i>Principalmente latas de cerveza o refrescos fabricados de aluminio y tarros de conservas que son fabricados con hojalata</p>
+        
+        <p><i class="fas fa-times"></i>Tarros contaminados con productos tóxicos, tarros de pintura</p>
+      </div>
+    </div>
+  </div>
+  <%- include('partials/parallax') %>
+
+  <div class="image-grid">
+    <div class="image-item"><img src="/icons/PET-1.png" alt="PET 1" onclick="openModal(this)"></div>
+    <div class="image-item"><img src="/icons/PET-2.png" alt="PET 2" onclick="openModal(this)"></div>
+    <div class="image-item"><img src="/icons/PET-3P.png" alt="PET 3" onclick="openModal(this)"></div>
+    <div class="image-item"><img src="/icons/PET-3U.png" alt="PET 4" onclick="openModal(this)"></div>
+    <div class="image-item"><img src="/icons/PET-4.png" alt="PET 5" onclick="openModal(this)"></div>
+    <div class="image-item"><img src="/icons/PET-5.png" alt="PET 6" onclick="openModal(this)"></div>
+    <div class="image-item"><img src="/icons/PET-6.png" alt="PET 7" onclick="openModal(this)"></div>
+    <div class="image-item"><img src="/icons/PET-6E.png" alt="PET 8" onclick="openModal(this)"></div>
+    <div class="image-item"><img src="/icons/PET-7.png" alt="PET 9" onclick="openModal(this)"></div>
+  </div>
+  
+  <!-- Modal para agrandar imagen -->
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImg">
+  </div>
+  
+<footer class="footer">
+  <p>© 2024 Mi Aplicación. Todos los derechos reservados.</p>
+  <img src="/icons/footer.png" >
+</footer>
+
+
+<script>
+  /*MODAL*/
+
+function openModal(image) {
+  var modal = document.getElementById("imageModal");
+  var modalImg = document.getElementById("modalImg");
+  
+  modal.style.display = "block";
+  modalImg.src = image.src;
+}
+
+function closeModal() {
+  var modal = document.getElementById("imageModal");
+  modal.style.display = "none";
+}
+</script>
+<script type="module" src="/js/index.js"></script>
+ </body>
+</html>
+

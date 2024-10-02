@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet-pip@latest/leaflet-pip.min.js"></script>
+    <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/mapa.css">
+    <meta name="theme-color" content="#000000">
+</head>
+<body>
+    <div class="container">
+        <%- include('partials/header') %>
+        <div id="map-template"></div>
+
+    <!--menu-container-->
+    <div id="menu-container">
+        <div class="padding-box">
+            <!--menu-principal-->
+            <section id="menu-principal" class="padding-box">
+                <div class="title">
+                    <p>MENU LIMPIO </p>
+                </div>
+                <button id="toggle-puntos" class="object">
+                    <p>RECICLAJE</p>
+                    <i class="fas fa-recycle"></i>
+                </button>
+                <button id="toggle-horarios" class="object">
+                    <p>HORARIOS SECTORES</p>
+                    <i class="fas fa-clock"></i>
+                </button>
+                <!--<button id="toggle-hogar" class="object">
+                    <p>CAM. RECOLECTOR</p>
+                    <i class="fas fa-truck"></i>
+                </button>-->
+                <!--<button id="toggle-notificacion" class="object">
+                    <p>NOTIFICAME</p>
+                    <i class="fas fa-bell"></i>
+                </button>-->
+                <button id="update-location-button" class="object">
+                    <p>CAMBIAR UBICACIÓN</p>
+                    <i class="fas fa-map-marker-alt"></i>
+                </button>              
+                <button id="toggle-tolva" class="object">
+                    <p>TOLVAS PERIURBANAS</p>
+                    <i class="fas fa-recycle"></i>
+                </button>
+                <div id="location-buttons" class="leaflet-bar" style="display: none;">
+                    <button id="confirm-location-button" onclick="confirmNewLocation()">Confirmar Ubicación</button>
+                    <button id="cancel-location-button" onclick="cancelUpdateLocation()">Cancelar</button>
+                  </div>
+            </section>
+            <!--menu-reciclaje-->
+            <section id="menu-reciclaje" class="padding-box" style="display: none;">
+                <div id="title-and-back">
+                    <div id="back-to-menu-principal" class="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <div id="toggle-title" class="title">
+                        <p>PUNTOS DE RECICLAJE</p>
+                    </div>                    
+                </div>
+                <button id="toggle-movil" class="object">
+                    <p>PUNTO VERDE MÓVIL</p>
+                    <i class="fas fa-recycle"></i>
+                </button>
+                <button id="toggle-segregada" class="object">
+                    <p>RECOLECCIÓN SEGREGADA</p>
+                    <i class="fas fa-wine-bottle"></i>
+                </button>
+                <button id="toggle-verde" class="object">
+                    <p>PUNTOS VERDES FIJOS</p>
+                    <i class="fas fa-recycle"></i>
+                </button>
+            </section>
+            <!-- Sección de información tolva -->
+            <section id="informacion-tolva" class="main-content padding-box" style="display: none;">
+                <div class="title">
+                    <p>INFORMACIÓN TOLVAS</p>
+                    <p>TOLVAS FIJAS- SECTORES RURALES- TOLVAS SECTORES RURALES 
+                        Informamos funcionamiento de recolección de basura en sectores periurbanos, sector rural y solicitud de tolvas</p>
+                     <img src="/icons/puntoTolva.png" style="width: 100%;">
+                </div>
+            </section>
+            <!-- Sección de información Reciclaje-->
+            <section id="informacion-reciclaje" class="main-content padding-box" style="display: none;">
+                <div class="title">
+                    <p>QUE PUEDES RECICLAR</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                     Voluptatibus optio, reiciendis error dolorem sequi cum quod porro velit culpa corrupti
+                     magnam dolore earum praesentium totam iure numquam incidunt itaque obcaecati.</p>
+                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Voluptatibus optio, reiciendis error dolorem sequi cum quod porro velit culpa corrupti
+                        magnam dolore earum praesentium totam iure numquam incidunt itaque obcaecati.</p>
+                </div>
+            </section>
+            <!-- Sección de información puntoverde movil-->
+            <section id="informacion-puntoverdemovil" class="main-content padding-box" style="display: none;">
+                <div class="title">
+                    <p>PUNTOS VERDE MÓVIL</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                     Voluptatibus optio, reiciendis error dolorem sequi cum quod porro velit culpa corrupti
+                     magnam dolore earum praesentium totam iure numquam incidunt itaque obcaecati.</p>
+                     <img src="/icons/puntoMovil.png" style="width: 100%;">
+                </div>
+            </section>
+            <!-- Sección de información segregada-->
+            <section id="informacion-segregada" class="main-content padding-box" style="display: none;">
+                <div class="title">
+                    <p>RECOLECCIÓN SEGREGADA</p>
+                    <p>Recolección segregada (Piloto) se realiza por 5 juntas de vecinos: 
+                        Martes se retira el vidrio, jueves se retira plásticos y latas de aluminio.</p><br>
+                    <p>La ruta de recolección segregada de reciclaje permite a los vecinos y vecinas de la comuna 
+                        dejar los residuos segregados en la puerta de su hogar. Esto facilita que los residuos lleguen 
+                        al centro de acopio, donde serán procesados y comercializados de manera eficiente.</p>
+                    <img src="/icons/cam600x300.png" style="width: 100%;">
+                </div>
+            </section>
+            <!-- Sección de información puntoverde -->
+            <section id="informacion-puntoverde" class="main-content padding-box" style="display: none;">
+                <div class="title">
+                    <p>PUNTOS FIJOS</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                     Voluptatibus optio, reiciendis error dolorem sequi cum quod porro velit culpa corrupti
+                     magnam dolore earum praesentium totam iure numquam incidunt itaque obcaecati.</p>
+                     <img src="/icons/puntoFijo1.png" style="width: 100%;">
+                </div>
+            </section>
+
+            <!-- Seccion de horarios -->
+            <section id="informacion-horario" class="main-content padding-box" style="display: none;">
+                <div class="title">
+                    <p>VERIFICA TU SECTOR</p>
+                    <p>Los Horarios de cada sector puede variar por diversos factores</p>
+                    <br>
+                </div>
+                <div>
+                    <div>
+                        <!--<p>Lunes</p>-->
+                        <div class="card margin-bottom-card">
+                            <div class="glassmorphism-effect">
+                                <p> Lunes</p>
+                            </div>
+                            <div class="glassmorphism-effect">
+                                <p>7:00am</p>
+                                <p> <span class="indicator indicator-red" id="sector-Lunes-indicator"></span> Sector Centro</p>
+                                <button class="sector-button" data-day="Lunes">VER SECTOR</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <!--<p>Martes</p>-->
+                        <div>
+                            <div class="card margin-bottom-card">
+                                <div class="glassmorphism-effect">
+                                    <p>Martes</p>
+                                </div>
+                                <div class="glassmorphism-effect">
+                                    <p>8:00am</p>
+                                    <p> <span class="indicator indicator-red" id="sector-Martes-indicator"></span>Sector 2</p>
+                                    <button class="sector-button" data-day="Martes">VER SECTOR</button>
+                                </div>
+                            </div>
+                            <!--<div class="card margin-bottom-card">
+                                <div class="glassmorphism-effect">
+                                    <p>Ejercicio</p>
+                                </div>
+                                <div class="glassmorphism-effect">
+                                    <p>5:00pm</p>
+                                    <p>cardio</p>
+                                </div>
+                            </div>-->
+                            
+                        </div>
+                    </div>
+                    <div>
+                        <!--<p>Miércoles</p>-->
+                        <div>
+                            <div class="card margin-bottom-card">
+                                <div class="glassmorphism-effect">
+                                    <p>Miércoles</p>
+                                </div>
+                                <div class="glassmorphism-effect">
+                                    <p>1:00am</p>
+                                    <p> <span class="indicator indicator-red" id="sector-Miercoles-indicator"></span> Sector 3</p>
+                                    <button class="sector-button" data-day="Miercoles">VER SECTOR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <!--<p>Jueves</p>-->
+                        <div>
+                            <div class="card margin-bottom-card">
+                                <div class="glassmorphism-effect">
+                                    <p>Jueves</p>
+                                </div>
+                                <div class="glassmorphism-effect">
+                                    <p>7:00am</p>
+                                    <p><span class="indicator indicator-red" id="sector-Jueves-indicator"></span>Sector 4</p>
+                                    <button class="sector-button" data-day="Jueves">VER SECTOR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <!--<p>Viernes</p>-->
+                        <div>
+                            <div class="card margin-bottom-card">
+                                <div class="glassmorphism-effect">
+                                    <p>Viernes</p>
+                                </div>
+                                <div class="glassmorphism-effect">
+                                    <p>8:00am</p>
+                                    <p><span class="indicator indicator-red" id="sector-Viernes-indicator"></span>Sector 5</p>
+                                    <button class="sector-button" data-day="Viernes">VER SECTOR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <!--<p>Sabado</p>-->
+                        <div>
+                            <div class="card margin-bottom-card">
+                                <div class="glassmorphism-effect">
+                                    <p>Sabado</p>
+                                </div>
+                                <div class="glassmorphism-effect">
+                                    <p>8:00am</p>
+                                    <p><span class="indicator indicator-red" id="sector-Sabado-indicator"></span>Sector 6</p>
+                                    <button class="sector-button" data-day="Sabado">VER SECTOR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>   
+ 
+    <div id="confirma-ubicacion" style="background-color: #fff; display: none;">
+        <i class="fas fa-map-marker-alt" style="color: red;"></i> Seleccione su sector y ubicación en el Mapa.
+        <br><button id="confirma-posicion">Confirmar Ubicación</button>
+    </div>
+    <!-- Agrega esto en tu HTML -->
+    <div id="info-poligono" style="display: none;">
+        <p>Estás fuera de un area delimitada.</p>
+    </div>
+    </div>
+
+    <script>
+        // Función para controlar el deslizamiento del menú
+        document.addEventListener('DOMContentLoaded', function() {
+            var menuContainer = document.getElementById('menu-container');
+            var toggleHorarios = document.getElementById('toggle-horarios');
+            var informacionHorario = document.getElementById('informacion-horario');
+            var informacionTolva = document.getElementById('informacion-tolva');
+
+            // Función para mostrar la sección de horarios y ocultar la sección de información
+            toggleHorarios.addEventListener('click', function() {
+                if (informacionHorario.style.display === 'none' || informacionHorario.style.display === '') {
+                    informacionHorario.style.display = 'block';
+                    informacionTolva.style.display = 'none';
+
+                    const eventoHorario = new CustomEvent('activarInformacionHorario');
+                    window.dispatchEvent(eventoHorario);
+                    
+                } else {
+                    informacionHorario.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="importmap" src="/js/main.js"></script>
+    <script type="module" src="/js/index.js"></script>
+    <script type="module" src="/js/puntos.js"></script>
+</body>
+</html>
